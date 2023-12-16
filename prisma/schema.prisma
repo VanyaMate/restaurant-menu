@@ -1,0 +1,94 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int            @id @default(autoincrement())
+  email     String         @unique
+  firstName String?        @map("first_name")
+  lastName  String?        @map("last_name")
+  roles     UsersOnRoles[]
+  token     Token?
+
+  @@map("users")
+}
+
+model Token {
+  id        Int    @id @default(autoincrement())
+  token     String
+  userEmail String @unique @map("user_email")
+  user      User   @relation(fields: [userEmail], references: [email])
+
+  @@map("users_tokens")
+}
+
+model Role {
+  id    Int            @id @default(autoincrement())
+  title String         @unique
+  users UsersOnRoles[]
+
+  @@map("roles")
+}
+
+model Category {
+  id          Int                  @id @default(autoincrement())
+  title       String
+  description String?
+  dishes      CategoriesOnDishes[]
+
+  @@map("categories")
+}
+
+model Dish {
+  id          Int                   @id @default(autoincrement())
+  title       String
+  description String
+  categories  CategoriesOnDishes[]
+  ingredients DishesOnIngredients[]
+
+  @@map("dishes")
+}
+
+model Ingredient {
+  id          Int                   @id @default(autoincrement())
+  title       String
+  description String?
+  dishes      DishesOnIngredients[]
+
+  @@map("ingredients")
+}
+
+model CategoriesOnDishes {
+  categoryId Int
+  dishId     Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  dish       Dish     @relation(fields: [dishId], references: [id])
+
+  @@id([categoryId, dishId])
+  @@map("categories_on_dishes")
+}
+
+model DishesOnIngredients {
+  dishId       Int
+  ingredientId Int
+  dish         Dish       @relation(fields: [dishId], references: [id])
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@id([dishId, ingredientId])
+  @@map("dishes_on_ingidients")
+}
+
+model UsersOnRoles {
+  userId Int
+  roleId Int
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+  @@map("users_on_roles")
+}
