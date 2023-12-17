@@ -8,12 +8,14 @@ generator client {
 }
 
 model User {
-  id        Int            @id @default(autoincrement())
-  email     String         @unique
-  firstName String?        @map("first_name")
-  lastName  String?        @map("last_name")
-  roles     UsersOnRoles[]
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  firstName String? @default("") @map("first_name")
+  lastName  String? @default("") @map("last_name")
+  role      Role?   @relation(fields: [roleId], references: [id])
   token     Token?
+  roleId    Int?
 
   @@map("users")
 }
@@ -28,9 +30,10 @@ model Token {
 }
 
 model Role {
-  id    Int            @id @default(autoincrement())
-  title String         @unique
-  users UsersOnRoles[]
+  id          Int    @id @default(autoincrement())
+  title       String @unique
+  permissions Int    @default(1)
+  users       User[]
 
   @@map("roles")
 }
@@ -38,7 +41,7 @@ model Role {
 model Category {
   id          Int                  @id @default(autoincrement())
   title       String
-  description String?
+  description String?              @default("")
   dishes      CategoriesOnDishes[]
 
   @@map("categories")
@@ -47,7 +50,7 @@ model Category {
 model Dish {
   id          Int                   @id @default(autoincrement())
   title       String
-  description String
+  description String?               @default("")
   categories  CategoriesOnDishes[]
   ingredients DishesOnIngredients[]
 
@@ -57,7 +60,7 @@ model Dish {
 model Ingredient {
   id          Int                   @id @default(autoincrement())
   title       String
-  description String?
+  description String?               @default("")
   dishes      DishesOnIngredients[]
 
   @@map("ingredients")
@@ -81,14 +84,4 @@ model DishesOnIngredients {
 
   @@id([dishId, ingredientId])
   @@map("dishes_on_ingidients")
-}
-
-model UsersOnRoles {
-  userId Int
-  roleId Int
-  user   User @relation(fields: [userId], references: [id])
-  role   Role @relation(fields: [roleId], references: [id])
-
-  @@id([userId, roleId])
-  @@map("users_on_roles")
 }
