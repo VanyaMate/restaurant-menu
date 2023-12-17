@@ -6,6 +6,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "",
         "mig:dev": "dotenv -e .env.dev npx prisma migrate dev",
+        "p:gen": "prisma generate",
         "start:dev": "dotenv -e .env.dev nodemon --config tsconfig.json app.ts"
     },
     "keywords": [],

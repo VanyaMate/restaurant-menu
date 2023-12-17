@@ -37,7 +37,7 @@ export class UserPrismaRepository implements IRepository<PrivateUser, PrivateUse
             });
             return this.userPrismaMapper.convert(userData);
         } catch (e) {
-
+            throw new Error(e);
         }
     }
 
