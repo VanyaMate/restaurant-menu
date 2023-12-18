@@ -1,5 +1,5 @@
 import { IJwtService } from './jwt.interface';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 
 export class JwtService implements IJwtService {

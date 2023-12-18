@@ -9,6 +9,7 @@ export type PrismaUser = User & {
 
 export class UserPrismaMapper implements IMapper<PrismaUser, PrivateUser> {
     convert (from: PrismaUser): PrivateUser {
+        console.log('FROM_', from);
         const to: PrivateUser = {
             id       : from.id.toString(),
             password : from.password,
@@ -19,10 +20,12 @@ export class UserPrismaMapper implements IMapper<PrismaUser, PrivateUser> {
             roleId   : from.roleId.toString(),
         };
 
+        console.log('from.role.id', from.role);
+
         if (from.role) {
             to.role = {
                 ...from.role,
-                id: from.role.id.toString(),
+                id: from.role?.id?.toString(),
             };
         }
 

@@ -16,7 +16,7 @@ model User {
   lastName  String? @default("") @map("last_name")
   role      Role?   @relation(fields: [roleId], references: [id])
   token     Token?
-  roleId    Int?
+  roleId    Int?    @default(1)
 
   @@map("users")
 }

@@ -10,3 +10,7 @@ export type Token = {
     token: string;
     userEmail: string;
 } & TokenIncludes;
+
+export type TokenCreateDto = Pick<Token, 'token' | 'userEmail'>;
+
+export type TokenUpdateDto = Partial<Pick<Token, 'token' | 'userEmail'>>;

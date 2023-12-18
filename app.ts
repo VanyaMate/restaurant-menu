@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import { Express } from 'express';
 import * as process from 'process';
 import { apiRouter } from './src/api/api.router';
+import * as bodyParser from 'body-parser';
 
 
 const app: Express    = express();
@@ -13,8 +14,9 @@ const port: number    = isNaN(envPort) ? 3000 : envPort;
 const prisma          = new PrismaClient();
 
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(cors({ origin: '*' }));
-app.use('api', apiRouter);
+app.use('/api', apiRouter);
 
 app.listen(port, () => {
     console.log('server work on', port); //

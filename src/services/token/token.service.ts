@@ -1,21 +1,23 @@
 import { ITokenService } from './token.interface';
-import { Token, TokenIncludes } from './token.types';
+import { Token, TokenCreateDto, TokenIncludes, TokenUpdateDto } from './token.types';
 import { IRepository } from '../../repository/repository.interface';
 
 
 export class TokenService implements ITokenService<Token> {
     constructor (
-        private readonly tokenRepository: IRepository<Token, TokenIncludes>,
+        private readonly tokenRepository: IRepository<Token, TokenIncludes, TokenCreateDto, TokenUpdateDto>,
     ) {
     }
 
-    public async createByUserId (id: string): Promise<Token> {
+    public async createByUserId (email: string): Promise<Token> {
         try {
-            const token: Token = await this.tokenRepository.findOneByFilter({ userEmail: id });
+            const token: Token = await this.tokenRepository.findOneByFilter({ userEmail: email });
             if (!token) {
                 return this.tokenRepository.create({
-                    userEmail: id,
+                    userEmail: email,
                     token    : Math.random().toString(),
+                }, {
+                    user: {},
                 });
             } else {
                 return this.tokenRepository.update(token.id, {

@@ -17,8 +17,8 @@ export class UserMapper implements IMapper<PrivateUser, PublicUser> {
             publicUser.lastName = user.lastName;
         }
 
-        if (user.roles) {
-            publicUser.roles = user.roles;
+        if (user.role) {
+            publicUser.role = user.role;
         }
 
         return publicUser;

@@ -6,4 +6,4 @@ import { Router } from 'express';
 export const apiRouter: Router = express.Router();
 
 
-apiRouter.use('v1', apiV1Router);
+apiRouter.use('/v1', apiV1Router);

@@ -22,7 +22,7 @@ export class UserPrismaRepository implements IRepository<PrivateUser, PrivateUse
     public async create (data: UserCreateDto, includes?: Include<PrivateUserIncludes>): Promise<PrivateUser> {
         try {
             const roleId: number     = parseInt(data.roleId);
-            const saveRoleId: number = isNaN(roleId) ? 0 : roleId;
+            const saveRoleId: number = isNaN(roleId) ? 1 : roleId;
             const userData           = await this.prismaClient.user.create({
                 data   : {
                     email    : data.email,

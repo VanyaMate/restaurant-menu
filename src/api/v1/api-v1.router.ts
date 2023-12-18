@@ -1,16 +1,11 @@
 import * as express from 'express';
 import { Router } from 'express';
-import { AuthService } from '../../services/auth/auth.service';
-import { UserPrismaRepository } from '../../repository/user/user-prisma.repository';
-import { PrismaClient } from '@prisma/client';
+import { authRouter } from './auth/auth.router';
+import { roleRouter } from './role/role.router';
 
 
 export const apiV1Router: Router = express.Router();
-const prisma = new PrismaClient()();
 
 
-apiV1Router.use('auth', (req, res) => {
-    new AuthService(
-        new UserPrismaRepository(prisma)
-    )
-});
+apiV1Router.use('/auth', authRouter);
+apiV1Router.use('/role', roleRouter);
