@@ -57,13 +57,9 @@ export class AuthService implements IAuthService<PublicUser> {
                 password: password,
                 roleId  : '1',
             });
-            console.log('user created', userDocument);
-            console.log('USER_DOCUMENT_ID', userDocument.id);
             const tokenDocument: Token = await this.tokenService.createByUserId(userDocument.email);
-            console.log('pre', userDocument, tokenDocument);
             return [ this.userMapper.convert(userDocument), this.jwtService.encode(tokenDocument.token) ];
         } catch (e) {
-            console.log('reg', e);
             throw new Error(e);
         }
     }
