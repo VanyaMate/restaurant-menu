@@ -6,15 +6,17 @@ import {
     TokenUpdateDto,
 } from '../../services/token/token.types';
 import { Filter, Include, MultiplyResponse, Options } from '../repository.types';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, User, Token as TokenPrisma } from '@prisma/client';
 import { IMapper } from '../../mapper/mapper.interface';
 import tokenPrismaMapper, { PrismaToken } from '../../mapper/token/token-prisma.mapper';
+import tokenPrismaFilterMapper from '../../mapper/token/token-prisma-filter.mapper';
 
 
 export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, TokenCreateDto, TokenUpdateDto> {
     constructor (
         private readonly prismaClient: PrismaClient,
         private readonly tokenPrismaMapper: IMapper<PrismaToken, Token>,
+        private readonly tokenFilterMapper: IMapper<Filter<Token>, Prisma.TokenWhereInput>,
     ) {
     }
 
@@ -36,7 +38,16 @@ export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, 
     }
 
     public async findOneByFilter (filter: Filter<Token>, includes?: Include<TokenIncludes>): Promise<Token> {
-        return Promise.resolve(undefined);
+        try {
+            if (typeof filter === 'function') return null;
+            const where: Prisma.TokenWhereInput = this.tokenFilterMapper.convert(filter);
+            const token: TokenPrisma            = await this.prismaClient.token.findFirst({
+                where: where,
+            });
+            return this.tokenPrismaMapper.convert(token);
+        } catch (e) {
+            throw new Error(e);
+        }
     }
 
     public async update (id: string, data: TokenUpdateDto, includes?: Include<TokenIncludes>): Promise<Token> {
@@ -45,4 +56,4 @@ export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, 
 
 }
 
-export default new TokenPrismaRepository(new PrismaClient(), tokenPrismaMapper);
+export default new TokenPrismaRepository(new PrismaClient(), tokenPrismaMapper, tokenPrismaFilterMapper);

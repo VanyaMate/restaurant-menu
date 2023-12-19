@@ -15,7 +15,9 @@ export class JwtService implements IJwtService {
     }
 
     encode<Data> (data: Data): string {
-        return jwt.sign(data as object, this._secret);
+        return jwt.sign(data as object, this._secret, {
+            expiresIn: '14d',
+        });
     }
 
     verify<Data> (token: string): Data {

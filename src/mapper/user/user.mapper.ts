@@ -6,7 +6,7 @@ export class UserMapper implements IMapper<PrivateUser, PublicUser> {
     convert (user: PrivateUser): PublicUser {
         const publicUser: PublicUser = {
             email : user.email,
-            avatar: user.email,
+            avatar: user.avatar,
         };
 
         if (user.firstName) {

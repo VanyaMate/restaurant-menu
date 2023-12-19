@@ -31,12 +31,13 @@ export class AuthService implements IAuthService<PublicUser> {
             const userDocument: PrivateUser = await this.userRepository.findOneByFilter({
                 email   : login,
                 password: password,
-            });
+            }, { role: {} });
             if (!userDocument) {
                 throw 'Неправильный логин или пароль';
             }
-            const token: Token = await this.tokenService.getByUserId(userDocument.email);
-            return [ this.userMapper.convert(userDocument), this.jwtService.encode(token.token) ];
+            const tokenDocument: Token = await this.tokenService.getByUserId(userDocument.email);
+            console.log('tok', tokenDocument.token);
+            return [ this.userMapper.convert(userDocument), this.jwtService.encode(tokenDocument) ];
         } catch (e) {
             throw new Error(e);
         }
@@ -48,7 +49,7 @@ export class AuthService implements IAuthService<PublicUser> {
             if (!tokenDocument) {
                 throw 'Token не обнаружен';
             }
-            return [ this.userMapper.convert(tokenDocument.user), this.jwtService.encode(tokenDocument.token) ];
+            return [ this.userMapper.convert(tokenDocument.user), this.jwtService.encode(tokenDocument) ];
         } catch (e) {
             throw new Error(e);
         }
@@ -62,7 +63,7 @@ export class AuthService implements IAuthService<PublicUser> {
                 roleId  : '1',
             });
             const tokenDocument: Token      = await this.tokenService.createByUserId(userDocument.email);
-            return [ this.userMapper.convert(userDocument), this.jwtService.encode(tokenDocument.token) ];
+            return [ this.userMapper.convert(userDocument), this.jwtService.encode(tokenDocument) ];
         } catch (e) {
             throw new Error(e);
         }
