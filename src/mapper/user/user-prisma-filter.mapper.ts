@@ -18,5 +18,6 @@ export class UserPrismaFilterMapper implements IMapper<Filter<PrivateUser>, Pris
             lastName : { equals: from.lastName },
         };
     }
-
 }
+
+export default new UserPrismaFilterMapper();

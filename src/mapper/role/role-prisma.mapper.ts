@@ -2,7 +2,7 @@ import { IMapper } from '../mapper.interface';
 import { Role as RolePrisma, User } from '@prisma/client';
 import { Role } from '../../services/role/role.types';
 import { PrivateUser } from '../../services/user/user.types';
-import { PrismaUser } from '../user/user-prisma.mapper';
+import userPrismaMapper, { PrismaUser } from '../user/user-prisma.mapper';
 
 
 export type PrismaRole = RolePrisma & {
@@ -23,5 +23,6 @@ export class RolePrismaMapper implements IMapper<PrismaRole, Role> {
             users      : from.users?.map((user) => this.userPrismaMapper.convert(user)) ?? [],
         };
     }
-
 }
+
+export default new RolePrismaMapper(userPrismaMapper);

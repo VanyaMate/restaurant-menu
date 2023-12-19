@@ -1,7 +1,7 @@
 import { ITokenService } from './token.interface';
 import { Token, TokenCreateDto, TokenIncludes, TokenUpdateDto } from './token.types';
 import { IRepository } from '../../repository/repository.interface';
-
+import tokenPrismaRepository from '../../repository/token/token-prisma.repository';
 
 export class TokenService implements ITokenService<Token> {
     constructor (
@@ -16,8 +16,6 @@ export class TokenService implements ITokenService<Token> {
                 return this.tokenRepository.create({
                     userEmail: email,
                     token    : Math.random().toString(),
-                }, {
-                    user: {},
                 });
             } else {
                 return this.tokenRepository.update(token.id, {
@@ -54,3 +52,5 @@ export class TokenService implements ITokenService<Token> {
     }
 
 }
+
+export default new TokenService(tokenPrismaRepository);

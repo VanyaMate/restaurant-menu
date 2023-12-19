@@ -11,6 +11,10 @@ import { Token } from '../token/token.types';
 import { IMapper } from '../../mapper/mapper.interface';
 import { ITokenService } from '../token/token.interface';
 import { IJwtService } from '../jwt/jwt.interface';
+import userPrismaRepository from '../../repository/user/user-prisma.repository';
+import userMapper from '../../mapper/user/user.mapper';
+import tokenService from '../token/token.service';
+import jwtService from '../jwt/jwt.service';
 
 
 export class AuthService implements IAuthService<PublicUser> {
@@ -57,11 +61,18 @@ export class AuthService implements IAuthService<PublicUser> {
                 password: password,
                 roleId  : '1',
             });
-            const tokenDocument: Token = await this.tokenService.createByUserId(userDocument.email);
+            const tokenDocument: Token      = await this.tokenService.createByUserId(userDocument.email);
             return [ this.userMapper.convert(userDocument), this.jwtService.encode(tokenDocument.token) ];
         } catch (e) {
             throw new Error(e);
         }
     }
-
 }
+
+
+export default new AuthService(
+    userPrismaRepository,
+    userMapper,
+    tokenService,
+    jwtService,
+);

@@ -1,7 +1,7 @@
 import { IMapper } from '../mapper.interface';
 import { Token as TokenPrisma, User } from '@prisma/client';
 import { Token } from '../../services/token/token.types';
-import { PrismaUser } from '../user/user-prisma.mapper';
+import userPrismaMapper, { PrismaUser } from '../user/user-prisma.mapper';
 import { PrivateUser } from '../../services/user/user.types';
 
 
@@ -14,11 +14,18 @@ export class TokenPrismaMapper implements IMapper<PrismaToken, Token> {
     }
 
     convert (from: PrismaToken): Token {
-        return {
+        const token: Token = {
             id       : from.id.toString(),
             token    : from.token,
             userEmail: from.userEmail,
-            user     : this.userPrismaMapper.convert(from.user),
         };
+
+        if (from.user) {
+            token.user = this.userPrismaMapper.convert(from.user);
+        }
+
+        return token;
     }
 }
+
+export default new TokenPrismaMapper(userPrismaMapper);

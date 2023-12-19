@@ -18,7 +18,13 @@ export class JwtService implements IJwtService {
         return jwt.sign(data as object, this._secret);
     }
 
-    verify (token: string): boolean {
-        return !!jwt.verify(token, this._secret);
+    verify<Data> (token: string): Data {
+        try {
+            return jwt.verify(token, this._secret) as Data;
+        } catch (e) {
+            throw new Error('Неверный токен авторизации');
+        }
     }
 }
+
+export default new JwtService('secret_key');

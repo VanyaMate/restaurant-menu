@@ -8,7 +8,8 @@ import {
 import { Filter, Include, MultiplyResponse, Options } from '../repository.types';
 import { Prisma, User, PrismaClient } from '@prisma/client';
 import { IMapper } from '../../mapper/mapper.interface';
-import { PrismaUser } from '../../mapper/user/user-prisma.mapper';
+import userPrismaMapper, { PrismaUser } from '../../mapper/user/user-prisma.mapper';
+import userPrismaFilterMapper from '../../mapper/user/user-prisma-filter.mapper';
 
 
 export class UserPrismaRepository implements IRepository<PrivateUser, PrivateUserIncludes, UserCreateDto, UserUpdateDto> {
@@ -90,3 +91,5 @@ export class UserPrismaRepository implements IRepository<PrivateUser, PrivateUse
         return Promise.resolve(undefined);
     }
 }
+
+export default new UserPrismaRepository(new PrismaClient(), userPrismaMapper, userPrismaFilterMapper);

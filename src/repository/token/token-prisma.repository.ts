@@ -8,7 +8,7 @@ import {
 import { Filter, Include, MultiplyResponse, Options } from '../repository.types';
 import { PrismaClient } from '@prisma/client';
 import { IMapper } from '../../mapper/mapper.interface';
-import { PrismaToken } from '../../mapper/token/token-prisma.mapper';
+import tokenPrismaMapper, { PrismaToken } from '../../mapper/token/token-prisma.mapper';
 
 
 export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, TokenCreateDto, TokenUpdateDto> {
@@ -19,13 +19,7 @@ export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, 
     }
 
     public async create (data: TokenCreateDto, includes?: Include<TokenIncludes>): Promise<Token> {
-        const tokenDocument = await this.prismaClient.token.create({
-            data,
-            include: {
-                user: !!includes?.user,
-            },
-        });
-
+        const tokenDocument = await this.prismaClient.token.create({ data });
         return this.tokenPrismaMapper.convert(tokenDocument);
     }
 
@@ -50,3 +44,5 @@ export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, 
     }
 
 }
+
+export default new TokenPrismaRepository(new PrismaClient(), tokenPrismaMapper);

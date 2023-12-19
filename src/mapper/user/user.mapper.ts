@@ -24,3 +24,5 @@ export class UserMapper implements IMapper<PrivateUser, PublicUser> {
         return publicUser;
     }
 }
+
+export default new UserMapper();

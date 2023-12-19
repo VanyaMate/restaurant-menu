@@ -3,7 +3,7 @@ import { Role, RoleCreateDto, RoleIncludes, RoleUpdateDto } from '../../services
 import { Filter, Include, MultiplyResponse, Options } from '../repository.types';
 import { PrismaClient } from '@prisma/client';
 import { IMapper } from '../../mapper/mapper.interface';
-import { PrismaRole } from '../../mapper/role/role-prisma.mapper';
+import rolePrismaMapper, { PrismaRole } from '../../mapper/role/role-prisma.mapper';
 
 
 export class RolePrismaRepository implements IRepository<Role, RoleIncludes, RoleCreateDto, RoleUpdateDto> {
@@ -45,3 +45,6 @@ export class RolePrismaRepository implements IRepository<Role, RoleIncludes, Rol
     }
 
 }
+
+
+export default new RolePrismaRepository(new PrismaClient(), rolePrismaMapper);
