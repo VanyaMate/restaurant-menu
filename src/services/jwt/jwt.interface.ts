@@ -3,5 +3,5 @@ export interface IJwtService {
 
     decode<Data> (token: string): Data;
 
-    verify (token: string): boolean;
+    verify<Data> (token: string): Data;
 }

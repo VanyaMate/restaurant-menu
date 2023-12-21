@@ -42,7 +42,10 @@ export class TokenPrismaRepository implements IRepository<Token, TokenIncludes, 
             if (typeof filter === 'function') return null;
             const where: Prisma.TokenWhereInput = this.tokenFilterMapper.convert(filter);
             const token: TokenPrisma            = await this.prismaClient.token.findFirst({
-                where: where,
+                where  : where,
+                include: {
+                    user: !!includes?.user,
+                },
             });
             return this.tokenPrismaMapper.convert(token);
         } catch (e) {
